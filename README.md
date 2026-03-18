@@ -17,7 +17,7 @@ Báo cáo được viết dưới dạng mã HTML thuần để giữ nguyên đ
    ```bash
    git clone https://github.com/ThanhNguyn/git-visualization-research
    ```
-2. Mở file `Bao_cao_Danh_gia.html` (hoặc tên file bạn đã lưu) bằng bất kỳ trình duyệt web nào (Chrome, Edge, Firefox, Safari).
+2. Mở file `index.html` (hoặc tên file bạn đã lưu) bằng bất kỳ trình duyệt web nào (Chrome, Edge, Firefox, Safari).
 3. Hoặc có thể copy trực tiếp nội dung hiển thị trên trình duyệt dán vào Microsoft Word để in ấn/nộp bài.
 
 ## 👨‍💻 Tác giả (Author)
