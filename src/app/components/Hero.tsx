@@ -1,5 +1,5 @@
-import { DAGHero } from "./DAGHero";
-import { useEffect, useState } from "react";
+import { DAGHero, nodes as dagNodes, edges as dagEdges } from "./DAGHero";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 const mono = { fontFamily: "JetBrains Mono, monospace" as const };
 
@@ -49,6 +49,32 @@ function useMouseCoords() {
 
 export function Hero() {
   const { lat, lng } = useMouseCoords();
+
+  // Compute DAG depth (longest path in edges) via BFS
+  const dagDepth = useMemo(() => {
+    const adj: Record<string, string[]> = {};
+    for (const [from, to] of dagEdges) {
+      (adj[from] ??= []).push(to);
+    }
+    let maxD = 0;
+    const stack: [string, number][] = dagNodes
+      .filter((n) => !dagEdges.some(([, to]) => to === n.id))
+      .map((n) => [n.id, 0]);
+    if (stack.length === 0 && dagNodes.length > 0) stack.push([dagNodes[0].id, 0]);
+    while (stack.length) {
+      const [id, d] = stack.pop()!;
+      if (d > maxD) maxD = d;
+      for (const next of adj[id] ?? []) stack.push([next, d + 1]);
+    }
+    return maxD;
+  }, []);
+
+  // Measure actual component render time
+  const t0 = useRef(performance.now());
+  const [renderMs, setRenderMs] = useState(0);
+  useEffect(() => {
+    setRenderMs(performance.now() - t0.current);
+  }, []);
 
   return (
     <section
@@ -281,8 +307,8 @@ export function Hero() {
                   marginTop: 6,
                 }}
               >
-                <span>9 nodes · 9 edges · depth 6</span>
-                <span>render 14.2ms</span>
+                <span>{dagNodes.length} nodes · {dagEdges.length} edges · depth {dagDepth}</span>
+                <span>render {renderMs.toFixed(1)}ms</span>
               </div>
             </div>
 

@@ -8,7 +8,7 @@ interface Node {
   branch: "main" | "feature" | "hotfix";
 }
 
-const nodes: Node[] = [
+export const nodes: Node[] = [
   { id: "a", x: 60, y: 180, label: "a1f3", branch: "main" },
   { id: "b", x: 160, y: 180, label: "9c2e", branch: "main" },
   { id: "c", x: 260, y: 180, label: "4d77", branch: "main" },
@@ -20,7 +20,7 @@ const nodes: Node[] = [
   { id: "i", x: 660, y: 180, label: "HEAD", branch: "main" },
 ];
 
-const edges: [string, string][] = [
+export const edges: [string, string][] = [
   ["a", "b"],
   ["b", "c"],
   ["c", "d"],
