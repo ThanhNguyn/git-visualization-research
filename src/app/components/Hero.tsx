@@ -1,4 +1,5 @@
 import { DAGHero } from "./DAGHero";
+import { useEffect, useState } from "react";
 
 const mono = { fontFamily: "JetBrains Mono, monospace" as const };
 
@@ -15,7 +16,40 @@ function Tick({ label, value }: { label: string; value: string }) {
   );
 }
 
+/** Convert a decimal degree to DMS string, e.g. 21.03472 → 21°02'05" */
+function toDMS(deg: number): string {
+  const d = Math.floor(Math.abs(deg));
+  const mf = (Math.abs(deg) - d) * 60;
+  const m = Math.floor(mf);
+  const s = Math.floor((mf - m) * 60);
+  return `${String(d).padStart(2, "0")}°${String(m).padStart(2, "0")}'${String(s).padStart(2, "0")}"`;
+}
+
+function useMouseCoords() {
+  // VJU campus center: 21°02'05" N, 105°50'12" E
+  const baseLat = 21.0347;
+  const baseLng = 105.8367;
+  const [lat, setLat] = useState(baseLat);
+  const [lng, setLng] = useState(baseLng);
+
+  useEffect(() => {
+    const onMove = (e: MouseEvent) => {
+      const nx = e.clientX / window.innerWidth;   // 0..1
+      const ny = e.clientY / window.innerHeight;  // 0..1
+      // ±0.03° range around VJU (~3km)
+      setLat(baseLat + (0.5 - ny) * 0.06);
+      setLng(baseLng + (nx - 0.5) * 0.06);
+    };
+    window.addEventListener("mousemove", onMove);
+    return () => window.removeEventListener("mousemove", onMove);
+  }, []);
+
+  return { lat, lng };
+}
+
 export function Hero() {
+  const { lat, lng } = useMouseCoords();
+
   return (
     <section
       id="hero"
@@ -58,8 +92,8 @@ export function Hero() {
           letterSpacing: 1.5,
         }}
       >
-        <span>⊕ N 21°02'05"</span>
-        <span>⊕ E 105°50'12"</span>
+        <span>⊕ N {toDMS(lat)}</span>
+        <span>⊕ E {toDMS(lng)}</span>
         <span style={{ color: "#E8701A" }}>● TX 2026 / SEMESTER-02</span>
         <span style={{ marginLeft: "auto", paddingRight: 24 }}>RPT-VJU/25112107</span>
       </div>

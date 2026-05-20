@@ -8,6 +8,8 @@ import { sources, typeMeta } from "./components/data";
 const READ_WIDTH = 680;
 const mono = { fontFamily: "JetBrains Mono, monospace" as const };
 
+import { useEffect, useState } from "react";
+
 function Meta({ k, v }: { k: string; v: string }) {
   return (
     <div className="flex items-center gap-2">
@@ -17,7 +19,22 @@ function Meta({ k, v }: { k: string; v: string }) {
   );
 }
 
+function useUTCClock() {
+  const fmt = () => {
+    const d = new Date();
+    const pad = (n: number) => String(n).padStart(2, "0");
+    return `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())} ${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}:${pad(d.getUTCSeconds())}`;
+  };
+  const [time, setTime] = useState(fmt);
+  useEffect(() => {
+    const id = setInterval(() => setTime(fmt()), 1000);
+    return () => clearInterval(id);
+  }, []);
+  return time;
+}
+
 function TopBar() {
+  const utc = useUTCClock();
   return (
     <div
       className="fixed top-0 right-0 flex items-center justify-between px-8"
@@ -35,9 +52,9 @@ function TopBar() {
         <span style={{ ...mono, fontSize: 10, color: "#6B6B6B" }}>STATION/DAG-OBS-01 · SECURE CHANNEL</span>
       </div>
       <div className="flex items-center gap-6">
-        <Meta k="UTC" v="2026-05-20 14:32:08" />
-        <Meta k="SRC" v="13/13" />
-        <Meta k="REV" v="2.1.3" />
+        <Meta k="UTC" v={utc} />
+        <Meta k="SRC" v={`${sources.length}/${sources.length}`} />
+        <Meta k="TYPES" v={`${Object.keys(typeMeta).length}`} />
       </div>
     </div>
   );
