@@ -28,6 +28,7 @@ export const projectFilesMap: Record<string, FileNode[]> = {
     { name: "index.html", path: "index.html", type: "file" },
     { name: "package.json", path: "package.json", type: "file" },
     { name: "vite.config.ts", path: "vite.config.ts", type: "file" },
+    { name: "README.md", path: "README.md", type: "file" },
     {
       name: "src",
       path: "src",
@@ -55,6 +56,17 @@ export const projectFilesMap: Record<string, FileNode[]> = {
                 { name: "data.ts", path: "src/app/components/data.ts", type: "file" }
               ]
             }
+          ]
+        },
+        {
+          name: "styles",
+          path: "src/styles",
+          type: "directory",
+          children: [
+            { name: "fonts.css", path: "src/styles/fonts.css", type: "file" },
+            { name: "index.css", path: "src/styles/index.css", type: "file" },
+            { name: "tailwind.css", path: "src/styles/tailwind.css", type: "file" },
+            { name: "theme.css", path: "src/styles/theme.css", type: "file" }
           ]
         }
       ]
@@ -152,7 +164,8 @@ export function CodeExplorer({
   const [expandedDirs, setExpandedDirs] = useState<Record<string, boolean>>({
     "src": true,
     "src/app": true,
-    "src/app/components": true
+    "src/app/components": true,
+    "src/styles": true
   });
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
 
@@ -298,7 +311,7 @@ export function CodeExplorer({
       else if (ext === "css") iconColor = "text-blue-400";
       else if (ext === "js") iconColor = "text-yellow-400";
       else if (ext === "ts" || ext === "tsx") iconColor = "text-sky-400";
-      else if (ext === "json") iconColor = "text-emerald-400";
+      else if (ext === "json") iconColor = "text-[#10b981]";
       else if (isImg) iconColor = "text-purple-400";
 
       return (
@@ -494,9 +507,9 @@ export function CodeExplorer({
                         alt={activeFile.split("/").pop() || ""}
                         className="object-contain max-h-[50vh] rounded"
                         style={{
-                          backgroundImage: "linear-gradient(45deg, #151b26 25%, transparent 25%), linear-gradient(-45deg, #151b26 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #151b26 75%), linear-gradient(-45deg, transparent 75%, #151b26 75%)",
-                          backgroundSize: "16px 16px",
-                          backgroundPosition: "0 0, 0 8px, 8px -8px, -8px 0px"
+                           backgroundImage: "linear-gradient(45deg, #151b26 25%, transparent 25%), linear-gradient(-45deg, #151b26 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #151b26 75%), linear-gradient(-45deg, transparent 75%, #151b26 75%)",
+                           backgroundSize: "16px 16px",
+                           backgroundPosition: "0 0, 0 8px, 8px -8px, -8px 0px"
                         }}
                       />
                     </div>
