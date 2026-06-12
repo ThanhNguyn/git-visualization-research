@@ -1,20 +1,34 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
-  Folder,
-  FolderOpen,
-  FileCode,
-  X,
-  Copy,
-  Check,
-  Search,
-  ChevronRight,
-  ChevronDown,
-  Terminal,
-  ExternalLink,
-  Code,
-  FileImage
+  Folder as LucideFolder,
+  FolderOpen as LucideFolderOpen,
+  FileCode as LucideFileCode,
+  X as LucideX,
+  Copy as LucideCopy,
+  Check as LucideCheck,
+  Search as LucideSearch,
+  ChevronRight as LucideChevronRight,
+  ChevronDown as LucideChevronDown,
+  Terminal as LucideTerminal,
+  ExternalLink as LucideExternalLink,
+  Code as LucideCode,
+  FileImage as LucideFileImage
 } from "lucide-react";
+
+const Folder = LucideFolder as any;
+const FolderOpen = LucideFolderOpen as any;
+const FileCode = LucideFileCode as any;
+const X = LucideX as any;
+const Copy = LucideCopy as any;
+const Check = LucideCheck as any;
+const Search = LucideSearch as any;
+const ChevronRight = LucideChevronRight as any;
+const ChevronDown = LucideChevronDown as any;
+const Terminal = LucideTerminal as any;
+const ExternalLink = LucideExternalLink as any;
+const Code = LucideCode as any;
+const FileImage = LucideFileImage as any;
 
 export interface FileNode {
   name: string;
@@ -153,21 +167,21 @@ export function CodeExplorer({
 
   const initialFilePath = findFirstFile(files);
 
-  const [activeFile, setActiveFile] = useState<string>(initialFilePath);
-  const [openTabs, setOpenTabs] = useState<string[]>(initialFilePath ? [initialFilePath] : []);
-  const [fileContent, setFileContent] = useState<string>("");
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [activeFile, setActiveFile] = useState(initialFilePath);
+  const [openTabs, setOpenTabs] = useState(initialFilePath ? [initialFilePath] : []);
+  const [fileContent, setFileContent] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null as string | null);
   
-  const [searchQuery, setSearchQuery] = useState<string>("");
-  const [copied, setCopied] = useState<boolean>(false);
-  const [expandedDirs, setExpandedDirs] = useState<Record<string, boolean>>({
+  const [searchQuery, setSearchQuery] = useState("");
+  const [copied, setCopied] = useState(false);
+  const [expandedDirs, setExpandedDirs] = useState({
     "src": true,
     "src/app": true,
     "src/app/components": true,
     "src/styles": true
-  });
-  const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
+  } as Record<string, boolean>);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const codeRef = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -189,7 +203,7 @@ export function CodeExplorer({
       setIsLoading(true);
       setError(null);
       try {
-        const baseUrl = import.meta.env.BASE_URL || "/";
+        const baseUrl = (import.meta as any).env?.BASE_URL || "/";
         const cleanBaseUrl = baseUrl.endsWith("/") ? baseUrl : baseUrl + "/";
         const fileUrl = `${cleanBaseUrl}source-code/${projectSlug}/${activeFile}`;
         
@@ -389,7 +403,7 @@ export function CodeExplorer({
 
             {activeFile && (
               <a
-                href={`${import.meta.env.BASE_URL || "/"}source-code/${projectSlug}/${activeFile}`}
+                href={`${(import.meta as any).env?.BASE_URL || "/"}source-code/${projectSlug}/${activeFile}`}
                 target="_blank"
                 rel="noreferrer"
                 className="grid h-8 w-8 place-items-center rounded hover:bg-white/5 text-stone-400 hover:text-white transition-colors"
@@ -503,7 +517,7 @@ export function CodeExplorer({
                   <div className="max-w-full max-h-full flex flex-col items-center gap-4 bg-[#080b10]/95 p-6 rounded-2xl border border-stone-900 shadow-2xl">
                     <div className="overflow-auto max-w-[80vw] max-h-[60vh] border border-stone-950 rounded bg-[#151b26]/50">
                       <img
-                        src={`${import.meta.env.BASE_URL || "/"}source-code/${projectSlug}/${activeFile}`}
+                        src={`${(import.meta as any).env?.BASE_URL || "/"}source-code/${projectSlug}/${activeFile}`}
                         alt={activeFile.split("/").pop() || ""}
                         className="object-contain max-h-[50vh] rounded"
                         style={{
